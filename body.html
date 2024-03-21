@@ -1,0 +1,94 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">  
+  <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Mali:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: "Mali", cursive;
+      font-weight: 300; /* Regular font weight */
+    }
+    span {
+      color: 'red'
+    }
+  </style>
+  <script>
+    function onSuccess([height, width]) {
+      if (!height || !width)
+      {
+        var errorMessage = "<b>Select an Image First</b>";
+        document.getElementById('getImg_error').innerHTML = errorMessage;
+        return 
+      }
+      document.getElementById('getImg_error').innerText = '';
+      document.getElementById('img_height').value = height;
+      document.getElementById('img_height_error').innerText = '';
+      document.getElementById('img_width').value = width;
+      document.getElementById('img_width_error').innerText = '';
+      
+    }
+    function onFailure([height,width]) {
+      if (!height || !width)
+      {
+        var errorMessage = "<b>Select an Image First</b>";
+        document.getElementById('getImg_error').innerHTML = errorMessage;
+        return 
+      }
+      document.getElementById('getImg_error').innerText = '';
+    }
+
+    function showError(elementId) {
+      var errorMessage = "<b>This field is required</b>";
+      document.getElementById(elementId + '_error').innerHTML = errorMessage;
+    }
+
+    function clearError(elementId) {
+      document.getElementById(elementId + '_error').innerText = '';
+    }
+  </script>
+</head>
+<body>
+  <div class="m-2">
+    <button class="bg-blue-500 hover:bg-blue-700 text-white p-1 my-2 rounded w-full flex items-center justify-center"
+        onclick="google.script.run.withFailureHandler(onFailure).withSuccessHandler(onSuccess).getImageDimensions()">Get Dimensions of Selected Image</button>
+    <b><span id="getImg_error" class="text-xs text-red-800"></span></b>
+  </div>
+  <div class="grid gap-6 mx-2 mt-2 grid-cols-2">
+    <div>
+      <label for="img_height" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Height (px)</label>
+      <input type="text" id="img_height" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Height" required onfocus="clearError('img_height')" />
+      <b><span id="img_height_error" class="text-xs text-red-800"></span></b>
+    </div>
+    <div>
+      <label for="img_width" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Width (px)</label>
+      <input type="text" id="img_width" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Width" required onfocus="clearError('img_width')" />
+      <b><span id="img_width_error" class="text-xs text-red-800"></span></b>
+    </div>
+  </div>
+  <div class="m-2">
+    <button class="bg-blue-500 hover:bg-blue-700 text-white p-1 my-2 rounded w-full flex items-center justify-center"
+        onclick="var height = document.getElementById('img_height').value;
+          var width = document.getElementById('img_width').value;
+          if (!height) { showError('img_height'); return; } else clearError('img_height')
+          if (!width) { showError('img_width'); return; } else clearError('img_width')
+
+          google.script.run.withSuccessHandler(onFailure).setImageDimensions([height, width]);">Set Dimensions of Selected Image</button>
+  </div>
+  <div class="m-2">
+    <button class="bg-blue-500 hover:bg-blue-700 text-white p-1 my-2 rounded w-full flex items-center justify-center" 
+  onclick="var height = document.getElementById('img_height').value;
+          var width = document.getElementById('img_width').value;
+          if (!height) { showError('img_height'); return; } else clearError('img_height')
+          if (!width) { showError('img_width'); return; } else clearError('img_width')
+          google.script.run.setAllImageDimensions([height, width]);">Set Dimensions for All Images</button>
+  </div>
+  <footer class="fixed bottom-0 left-0 w-full bg-gray-600 p-2 text-center text-sm">
+  <span class="text-gray-200">Created and Managed by Tausif Sarwar</span>
+</footer>
+
+</body>
+</html>
